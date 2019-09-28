@@ -14,7 +14,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Provide the setup stocked in the config file.
+ * Provides the setup stocked in the config file.
  */
 public class Config {
 
@@ -25,7 +25,7 @@ public class Config {
 
     /**
      * <b>The constructor.</b>
-     * Read the config file and fetch the essential data.
+     * Reads the config file and fetchs the essential data.
      */
     public Config() {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -53,7 +53,7 @@ public class Config {
     }
 
     /**
-     * Provide the number of digits in the given value.
+     * Provides the number of digits in the given value.
      * @return the number of digits in the given value
      */
     public int getNumberOfDigits() {

@@ -1,1 +1,1 @@
-typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"com.ocr.pavelrodin.config","l":"Config"},{"p":"com.ocr.pavelrodin","l":"Main"}]
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"com.ocr.pavelrodin.config","l":"Config"},{"p":"com.ocr.pavelrodin","l":"Main"},{"p":"com.ocr.pavelrodin.menu","l":"Menu"}]

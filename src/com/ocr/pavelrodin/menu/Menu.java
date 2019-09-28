@@ -1,9 +1,10 @@
 package com.ocr.pavelrodin.menu;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
- * Create and run a menu
+ * Creates and runs a menu
  */
 public class Menu {
 
@@ -21,7 +22,7 @@ public class Menu {
     private int choice = 0;
 
     /**
-     * Constructor. Create a menu.
+     * Constructor. Creates a menu.
      * @param questionInit The title of the menu.
      * @param choicesInit The items of the menu.
      */
@@ -31,7 +32,7 @@ public class Menu {
     }
 
     /**
-     * Display the menu
+     * Displays the menu
      */
     public void displayMenu () {
         System.out.println(question);
@@ -41,7 +42,7 @@ public class Menu {
     }
 
     /**
-     * Get the user's input and verify it.
+     * Gets the user's input and verify it.
      */
     public void getResponse () {
 
@@ -49,7 +50,12 @@ public class Menu {
         int response;
         boolean isResponseValid = false;
         do {
-            response = sc.nextInt();
+            try {
+                response = sc.nextInt();
+            } catch (InputMismatchException e) {
+                sc.next();
+                response = 0;
+            }
             if (response > 0 && response <= choices.length) {
                 isResponseValid = true;
             } else {
