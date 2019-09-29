@@ -24,6 +24,16 @@ public class Config {
     private int numberOfDigits;
 
     /**
+     * The number of attempts
+     */
+    private int numberOfAttempts;
+
+    /**
+     * If true, displays the solution
+     */
+    private boolean devMod;
+
+    /**
      * <b>The constructor.</b>
      * Reads the config file and fetchs the essential data.
      */
@@ -41,6 +51,12 @@ public class Config {
             String expression = "//numberofdigits";
             String value = (String) path.evaluate(expression, root);
             numberOfDigits = Integer.parseInt(value);
+            expression = "//numberofattempts";
+            value = (String) path.evaluate(expression, root);
+            numberOfAttempts = Integer.parseInt(value);
+            expression = "//devmod";
+            value = (String) path.evaluate(expression, root);
+            devMod = value.equals("true");
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (SAXException e) {
@@ -58,5 +74,21 @@ public class Config {
      */
     public int getNumberOfDigits() {
         return numberOfDigits;
+    }
+
+    /**
+     * Provides the number of available attempts
+     * @return the number of available attempts
+     */
+    public int getNumberOfAttempts() {
+        return numberOfAttempts;
+    }
+
+    /**
+     * If true, display the solution
+     * @return is the developer mode activated
+     */
+    public boolean isDevMod() {
+        return devMod;
     }
 }

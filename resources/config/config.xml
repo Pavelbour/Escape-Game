@@ -2,4 +2,6 @@
 <!DOCTYPE data SYSTEM "config.tdt">
 <data>
     <numberofdigits>4</numberofdigits>
+    <numberofattempts>10</numberofattempts>
+    <devmod>true</devmod>
 </data>
