@@ -83,6 +83,8 @@ public class Game {
                     break;
             case 2: isWin = this.defender();
                     break;
+            case 3: isWin = this.duel();
+                    break;
         }
         return isWin;
     }
@@ -126,6 +128,10 @@ public class Game {
         return false;
     }
 
+    /**
+     * Runs a new game in the mode defender.
+     * @return true if the user wins.
+     */
     public boolean defender () {
         boolean isWin;
         long[] values;
@@ -156,5 +162,28 @@ public class Game {
             }
         }
         return true;
+    }
+
+    /**
+     * Runs a new game in the mode duel.
+     * @return true if the user wins.
+     */
+    public boolean duel () {
+        boolean isUserTurn = true;
+        while (true) {
+            if (isUserTurn) {
+                if (this.challenger()) {
+                    return true;
+                } else {
+                    isUserTurn = false;
+                }
+            } else {
+                if (!this.defender()) {
+                    return false;
+                } else {
+                    isUserTurn = true;
+                }
+            }
+        }
     }
 }
