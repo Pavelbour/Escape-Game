@@ -14,10 +14,11 @@ public class Game {
     private GameInterface gameInterface;
     private int modeOfGame;
     private int[] number;
-    private int[] values;
+    private int[] suggestions;
     private int numberOfDigits;
     private int numberOfAttempts;
     private boolean devmod;
+    private boolean isUserWin;
 
     /**
      * Constructor.
@@ -31,7 +32,7 @@ public class Game {
         numberOfAttempts = config.getNumberOfAttempts();
         devmod = config.isDevMod();
         number = new int[numberOfDigits];
-        values = new int[numberOfDigits];
+        suggestions = new int[numberOfDigits];
     }
 
     /**
@@ -55,22 +56,47 @@ public class Game {
     }
 
     /**
-     * Select a mode of game depending on the user's choice and runs a new game.
-     * @return True if the user wins.
+     * Displays the main menu and selects a mode of game.
      */
-    public boolean startNewGame () {
-        boolean isWin = false;
+    public void startNewGame () {
         String[] menuItems = {"Challenger", "Défenseur", "Duel"};
         modeOfGame = gameInterface.displayMenu("Choisissez le mode de jeu", menuItems);
+        this.launchGame();
+        this.endGame();
+    }
+
+    /**
+     * Launches a new game depending on the chosen mode.
+     */
+    private void launchGame () {
         switch (modeOfGame) {
-            case 1: isWin = this.challenger();
-                    break;
-            case 2: isWin = this.defender();
-                    break;
-            case 3: isWin = this.duel();
-                    break;
+            case 1: isUserWin = this.challenger();
+                break;
+            case 2: isUserWin = this.defender();
+                break;
+            case 3: isUserWin = this.duel();
+                break;
         }
-        return isWin;
+    }
+
+    /**
+     * Displays the menu in the end of the game and selects an option.
+     */
+    private void endGame () {
+        String[] menuItems = {"Encore une partie", "Menu principal", "Quitter"};
+        if (isUserWin) {
+            System.out.println("Felicitations ! Vous avez gagné !");
+        } else {
+            System.out.println("Vous avez perdu.");
+            gameInterface.displayNumber("La solution est : ", number);
+        }
+        switch (gameInterface.displayMenu("Choisissez une option", menuItems)) {
+            case 1: this.launchGame();
+                    break;
+            case 2: this.startNewGame();
+                    break;
+            case 3: return;
+        }
     }
 
     /**
@@ -87,12 +113,12 @@ public class Game {
             isWin = true;
             System.out.println("Tentative numéro " + (i + 1));
             System.out.println("Saisissez " + numberOfDigits + " chifres");
-            values = gameInterface.inputNumber(0, 9, numberOfDigits);
+            suggestions = gameInterface.inputNumber(0, 9, numberOfDigits);
             for (int k = 0; k < numberOfDigits; k++) {
-                if (values[k] < number[k]){
+                if (suggestions[k] < number[k]){
                     System.out.print("-");
                     isWin = false;
-                } else if (values[k] > number[k]) {
+                } else if (suggestions[k] > number[k]) {
                     System.out.print("+");
                     isWin = false;
                 } else {
@@ -114,21 +140,21 @@ public class Game {
     public boolean defender () {
         boolean isWin;
         for (int i = 0; i < numberOfDigits; i++) {
-            values[i] = generateDigit(0, 9);
+            suggestions[i] = generateDigit(0, 9);
         }
         System.out.println("Saisissez " + numberOfDigits + " chifres.");
         number = gameInterface.inputNumber(0, 9, numberOfDigits);
         for (int i = 0; i < numberOfAttempts; i++) {
             System.out.println("Tentetive numéro : " + (i + 1));
-            gameInterface.displayNumber("Combinaision à essayer : ", values);
+            gameInterface.displayNumber("Combinaision à essayer : ", suggestions);
             isWin = false;
             for (int j = 0; j < numberOfDigits; j++) {
-                if (values[j] < number[j]) {
+                if (suggestions[j] < number[j]) {
                     isWin = true;
-                    values[j] = generateDigit(values[j] + 1, 9);
-                } else if (values[j] > number[j]) {
+                    suggestions[j] = generateDigit(suggestions[j] + 1, 9);
+                } else if (suggestions[j] > number[j]) {
                    isWin = true;
-                   values[j] = generateDigit(0, values[j] - 1);
+                   suggestions[j] = generateDigit(0, suggestions[j] - 1);
                 }
             }
             if (!isWin){
