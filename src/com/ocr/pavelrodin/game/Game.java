@@ -1,9 +1,6 @@
 package com.ocr.pavelrodin.game;
 
-import com.ocr.pavelrodin.config.Config;
-import com.ocr.pavelrodin.gameinterface.GameInterface;
-
-import java.util.Scanner;
+import com.ocr.pavelrodin.display.Display;
 
 
 /**
@@ -11,56 +8,44 @@ import java.util.Scanner;
  */
 public class Game {
 
-    private GameInterface gameInterface;
+    /**
+     * An instance of the class Computer that represents the entity computer.
+     */
+    private ComputerInterface computer;
+    /**
+     * An instance of the class Human that represents the entity human.
+     */
+    private HumanInterface human;
+    /**
+     * An instance of the class Displays that displays the interface of the game.
+     */
+    private Display display;
+    /**
+     * If true the game runs in the mode developer.
+     */
     private int modeOfGame;
-    private int[] number;
-    private int[] suggestions;
-    private int numberOfDigits;
-    private int numberOfAttempts;
-    private boolean devmod;
-    private boolean isUserWin;
 
     /**
      * Constructor.
      * Creates a new game.
      * Fetch the parameters from the config file.
+     * @param initDisplay an instance of the class Display that displays the interface of the game.
+     * @param initComputer an instance of the class Computer that represents the entity computer.
+     * @param initHuman an instance of the class Human that represents the entity human.
      */
-    public Game() {
-        Config config = new Config();
-        gameInterface = new GameInterface();
-        numberOfDigits = config.getNumberOfDigits();
-        numberOfAttempts = config.getNumberOfAttempts();
-        devmod = config.isDevMod();
-        number = new int[numberOfDigits];
-        suggestions = new int[numberOfDigits];
+    public Game (Display initDisplay, ComputerInterface initComputer, HumanInterface initHuman) {
+        computer = initComputer;
+        human = initHuman;
+        display = initDisplay;
     }
 
-    /**
-     * Generates a key number.
-     */
-    private void generateNumber() {
-        for (int i = 0; i < numberOfDigits; i++) {
-            number[i] = (int) Math.round(Math.random() * 9);
-        }
-    }
-
-    /**
-     * Generates a digit in the closed range [min, max]
-     * @param min minimum value
-     * @param max maximum value
-     * @return a digit in the closed range [min, max]
-     */
-    private int generateDigit (int min, int max) {
-        double f = Math.random()/Math.nextDown(1.0);
-        return (int) Math.round(min*(1.0 - f) + max*f);
-    }
 
     /**
      * Displays the main menu and selects a mode of game.
      */
     public void startNewGame () {
         String[] menuItems = {"Challenger", "Défenseur", "Duel"};
-        modeOfGame = gameInterface.displayMenu("Choisissez le mode de jeu", menuItems);
+        modeOfGame = display.displayMenu("Choisissez le mode de jeu", menuItems);
         this.launchGame();
         this.endGame();
     }
@@ -70,12 +55,12 @@ public class Game {
      */
     private void launchGame () {
         switch (modeOfGame) {
-            case 1: isUserWin = this.challenger();
-                break;
-            case 2: isUserWin = this.defender();
-                break;
-            case 3: isUserWin = this.duel();
-                break;
+            case 1: human.challenger();
+                    break;
+            case 2: computer.defender();
+                    break;
+            case 3: this.duel();
+                    break;
         }
     }
 
@@ -84,13 +69,7 @@ public class Game {
      */
     private void endGame () {
         String[] menuItems = {"Encore une partie", "Menu principal", "Quitter"};
-        if (isUserWin) {
-            System.out.println("Felicitations ! Vous avez gagné !");
-        } else {
-            System.out.println("Vous avez perdu.");
-            gameInterface.displayNumber("La solution est : ", number);
-        }
-        switch (gameInterface.displayMenu("Choisissez une option", menuItems)) {
+        switch (display.displayMenu("Choisissez une option", menuItems)) {
             case 1: this.launchGame();
                     break;
             case 2: this.startNewGame();
@@ -100,86 +79,20 @@ public class Game {
     }
 
     /**
-     * Runs a new game in the mode challenger.
-     * @return true if the player wins.
-     */
-    public boolean challenger () {
-        this.generateNumber();
-        boolean isWin;
-        if (devmod) {
-            gameInterface.displayNumber("La solution est : ", number);
-        }
-        for (int i = 0; i < numberOfAttempts; i++){
-            isWin = true;
-            System.out.println("Tentative numéro " + (i + 1));
-            System.out.println("Saisissez " + numberOfDigits + " chifres");
-            suggestions = gameInterface.inputNumber(0, 9, numberOfDigits);
-            for (int k = 0; k < numberOfDigits; k++) {
-                if (suggestions[k] < number[k]){
-                    System.out.print("-");
-                    isWin = false;
-                } else if (suggestions[k] > number[k]) {
-                    System.out.print("+");
-                    isWin = false;
-                } else {
-                    System.out.print("=");
-                }
-            }
-            System.out.println("");
-            if (isWin) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Runs a new game in the mode defender.
-     * @return true if the player wins.
-     */
-    public boolean defender () {
-        boolean isWin;
-        for (int i = 0; i < numberOfDigits; i++) {
-            suggestions[i] = generateDigit(0, 9);
-        }
-        System.out.println("Saisissez " + numberOfDigits + " chifres.");
-        number = gameInterface.inputNumber(0, 9, numberOfDigits);
-        for (int i = 0; i < numberOfAttempts; i++) {
-            System.out.println("Tentetive numéro : " + (i + 1));
-            gameInterface.displayNumber("Combinaision à essayer : ", suggestions);
-            isWin = false;
-            for (int j = 0; j < numberOfDigits; j++) {
-                if (suggestions[j] < number[j]) {
-                    isWin = true;
-                    suggestions[j] = generateDigit(suggestions[j] + 1, 9);
-                } else if (suggestions[j] > number[j]) {
-                   isWin = true;
-                   suggestions[j] = generateDigit(0, suggestions[j] - 1);
-                }
-            }
-            if (!isWin){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
      * Runs a new game in the mode duel.
-     * @return true if the player wins.
      */
-    public boolean duel () {
+    private void duel () {
         boolean isUserTurn = true;
         while (true) {
             if (isUserTurn) {
-                if (this.challenger()) {
-                    return true;
+                if (human.challenger()) {
+                    return;
                 } else {
                     isUserTurn = false;
                 }
             } else {
-                if (!this.defender()) {
-                    return false;
+                if (!computer.defender()) {
+                    return;
                 } else {
                     isUserTurn = true;
                 }

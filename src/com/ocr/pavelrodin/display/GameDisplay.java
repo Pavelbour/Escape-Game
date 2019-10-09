@@ -1,12 +1,12 @@
-package com.ocr.pavelrodin.gameinterface;
+package com.ocr.pavelrodin.display;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
- * Creates and runs a menu
+ * Display the interface of the game and manages the user's input.
  */
-public class GameInterface {
+public class GameDisplay implements Display {
 
     /**
      * The user's choice.
@@ -26,6 +26,11 @@ public class GameInterface {
         return this.inputNumber(1, choices.length, 1)[0];
     }
 
+    /**
+     * Displays the given combination.
+     * @param message A message to display.
+     * @param number A combination to display.
+     */
     public void displayNumber (String message, int[] number) {
         System.out.print(message);
         for ( long digit : number) {
@@ -34,6 +39,14 @@ public class GameInterface {
         System.out.println("");
     }
 
+    /**
+     * Fetches the user's input and verifies it.
+     * Display an error message if the value is out of range.
+     * @param min The minimum value.
+     * @param max The max value.
+     * @param number The number of digits in the combination.
+     * @return The user's input.
+     */
     public int[] inputNumber (int min, int max, int number) {
         Scanner sc = new Scanner(System.in);
         int[] responses = new int[number];
@@ -52,6 +65,7 @@ public class GameInterface {
                     }
                 } catch (InputMismatchException e) {
                         isResponseValid = false;
+                        sc.next();
                 }
             } while (!isResponseValid);
         }

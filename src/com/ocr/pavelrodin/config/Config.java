@@ -16,10 +16,10 @@ import java.io.IOException;
 /**
  * Provides the setup stocked in the config file.
  */
-public class Config {
+public class Config implements ConfigInterface {
 
     /**
-     * The number of digits in the given value.
+     * The number of digits in the given combination.
      */
     private int numberOfDigits;
 
