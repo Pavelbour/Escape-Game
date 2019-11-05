@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" xmlns="http://logging.apache.org/log4j/2.0/config">
+    <Appenders>
+        <File name="File" fileName="logs/app.log">
+            <PatternLayout pattern="%d %p %c{1.} [%t] %m%n"></PatternLayout>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="File"></AppenderRef>
+        </Root>
+    </Loggers>
+</Configuration>

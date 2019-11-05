@@ -1,6 +1,8 @@
 package com.ocr.pavelrodin.game;
 
 import com.ocr.pavelrodin.display.Display;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -54,12 +56,28 @@ public class Game {
      * Launches a new game depending on the chosen mode.
      */
     private void launchGame () {
+        Logger logger = LogManager.getLogger();
         switch (modeOfGame) {
-            case 1: human.challenger();
+            case 1: logger.info("A new game was started in mode challenger.");
+                    if (human.challenger()) {
+                        logger.info("The game is over. The player won.");
+                    } else {
+                        logger.info("The game is over. The computer won.");
+                    }
                     break;
-            case 2: computer.defender();
+            case 2: logger.info("A new game was started in mode defender.");
+                    if (computer.defender()) {
+                        logger.info("The game is over. The player won.");
+                    } else {
+                        logger.info("The game is over. The computer won.");
+                    }
                     break;
-            case 3: this.duel();
+            case 3: logger.info("A new game was started in mode duel.");
+                    if (this.duel()) {
+                        logger.info("The game is over. The player won.");
+                    } else {
+                        logger.info("The game is over. The computer won.");
+                    }
                     break;
         }
     }
@@ -80,19 +98,20 @@ public class Game {
 
     /**
      * Runs a new game in the mode duel.
+     * @return true if the player wins.
      */
-    private void duel () {
+    private boolean duel () {
         boolean isUserTurn = true;
         while (true) {
             if (isUserTurn) {
                 if (human.challenger()) {
-                    return;
+                    return true;
                 } else {
                     isUserTurn = false;
                 }
             } else {
                 if (!computer.defender()) {
-                    return;
+                    return false;
                 } else {
                     isUserTurn = true;
                 }
