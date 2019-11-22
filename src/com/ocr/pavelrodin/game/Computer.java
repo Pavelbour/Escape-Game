@@ -33,32 +33,47 @@ public class Computer extends Player implements ComputerInterface{
      * @return true if the player wins.
      */
     public boolean defender () {
-        boolean isWin;
         for (int i = 0; i < numberOfDigits; i++) {
             suggestions[i] = generateDigit(0, 9);
         }
-        System.out.println("Saisissez " + numberOfDigits + " chifres.");
-        number = display.inputNumber(0, 9, numberOfDigits);
         for (int i = 0; i < numberOfAttempts; i++) {
             System.out.println("Tentetive numéro : " + (i + 1));
-            display.displayNumber("Combinaision à essayer : ", suggestions);
-            isWin = false;
-            for (int j = 0; j < numberOfDigits; j++) {
-                if (suggestions[j] < number[j]) {
-                    isWin = true;
-                    suggestions[j] = generateDigit(suggestions[j] + 1, 9);
-                } else if (suggestions[j] > number[j]) {
-                    isWin = true;
-                    suggestions[j] = generateDigit(0, suggestions[j] - 1);
-                }
-            }
-            if (!isWin){
+            if (!this.turn()){
                 System.out.println("Vous avez perdu.");
                 return false;
             }
         }
         System.out.println("Felicitations ! Vous avez gagné !");
         return true;
+    }
+
+    /**
+     * Saves the combination given by the player.
+     */
+    public void inputCombination() {
+        System.out.println("Saisissez " + numberOfDigits + " chifres.");
+        number = display.inputNumber(0, 9, numberOfDigits);
+    }
+
+    /**
+     * Makes an attempt to guess the combination.
+     * @return true if the attempt is successful.
+     */
+    public boolean turn() {
+        display.displayNumber("Combinaision à essayer : ", suggestions);
+        boolean isWin = false;
+        for (int i = 0; i < numberOfDigits; i++) {
+            if (suggestions[i] < number[i]) {
+                isWin = true;
+                suggestions[i] = generateDigit(suggestions[i] + 1, 9);
+            } else if (suggestions[i] > number[i]) {
+                isWin = true;
+                suggestions[i] = generateDigit(0, suggestions[i] - 1);
+            }
+        }
+
+        return isWin;
+
     }
 
 }

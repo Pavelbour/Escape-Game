@@ -6,8 +6,19 @@ package com.ocr.pavelrodin.game;
 public interface ComputerInterface {
 
     /**
+     * Saves the combination given by the player.
+     */
+    public void inputCombination();
+
+    /**
      * Runs a new game in the mode defender.
      * @return true if the player wins.
      */
     public boolean defender ();
+
+    /**
+     * Makes an attempt to guess the combination.
+     * @return true if the attempt is successful.
+     */
+    public boolean turn();
 }

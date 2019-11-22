@@ -59,6 +59,7 @@ public class Game {
         Logger logger = LogManager.getLogger();
         switch (modeOfGame) {
             case 1: logger.info("A new game was started in mode challenger.");
+                    human.generateNumber();
                     if (human.challenger()) {
                         logger.info("The game is over. The player won.");
                     } else {
@@ -66,6 +67,7 @@ public class Game {
                     }
                     break;
             case 2: logger.info("A new game was started in mode defender.");
+                    computer.inputCombination();
                     if (computer.defender()) {
                         logger.info("The game is over. The player won.");
                     } else {
@@ -102,15 +104,19 @@ public class Game {
      */
     private boolean duel () {
         boolean isUserTurn = true;
+        human.generateNumber();
+        computer.inputCombination();
         while (true) {
             if (isUserTurn) {
-                if (human.challenger()) {
+                if (human.turn()) {
+                    System.out.println("Félicitations ! Vous avez gagné.");
                     return true;
                 } else {
                     isUserTurn = false;
                 }
             } else {
-                if (!computer.defender()) {
+                if (!computer.turn()) {
+                    System.out.println("Vous avez perdu.");
                     return false;
                 } else {
                     isUserTurn = true;

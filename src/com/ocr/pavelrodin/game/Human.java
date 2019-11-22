@@ -24,7 +24,7 @@ public class Human extends Player implements HumanInterface {
     /**
      * Generates a key number.
      */
-    private void generateNumber() {
+    public void generateNumber() {
         for (int i = 0; i < numberOfDigits; i++) {
             number[i] = (int) Math.round(Math.random() * 9);
         }
@@ -35,29 +35,10 @@ public class Human extends Player implements HumanInterface {
      * @return true if the player wins.
      */
     public boolean challenger () {
-        this.generateNumber();
-        if (devmod) {
-            display.displayNumber("La solution est : ", number);
-        }
-        boolean isWin;
         for (int i = 0; i < numberOfAttempts; i++){
-            isWin = true;
             System.out.println("Tentative numéro " + (i + 1));
-            System.out.println("Saisissez " + numberOfDigits + " chifres");
-            suggestions = display.inputNumber(0, 9, numberOfDigits);
-            for (int k = 0; k < numberOfDigits; k++) {
-                if (suggestions[k] < number[k]){
-                    System.out.print("-");
-                    isWin = false;
-                } else if (suggestions[k] > number[k]) {
-                    System.out.print("+");
-                    isWin = false;
-                } else {
-                    System.out.print("=");
-                }
-            }
             System.out.println("");
-            if (isWin) {
+            if (this.turn()) {
                 System.out.println("Felicitations ! Vous avez gagné !");
                 return true;
             }
@@ -65,5 +46,33 @@ public class Human extends Player implements HumanInterface {
         System.out.println("Vous avez perdu.");
         display.displayNumber("La solution est : ", number);
         return false;
+    }
+
+    /**
+     * Makes an attempt to guess the combination.
+     * @return true if the attempt is successful.
+     */
+    public boolean turn() {
+        if (devmod) {
+            display.displayNumber("La solution est : ", number);
+        }
+        boolean isWin = true;
+        System.out.println("Saisissez " + numberOfDigits + " chifres");
+        suggestions = display.inputNumber(0, 9, numberOfDigits);
+        for (int i = 0; i < numberOfDigits; i++) {
+            if (suggestions[i] < number[i]){
+                System.out.print("-");
+                isWin = false;
+            } else if (suggestions[i] > number[i]) {
+                System.out.print("+");
+                isWin = false;
+            } else {
+                System.out.print("=");
+            }
+        }
+
+        System.out.println("");
+        return isWin;
+
     }
 }

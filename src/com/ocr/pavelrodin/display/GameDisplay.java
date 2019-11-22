@@ -9,11 +9,6 @@ import java.util.Scanner;
 public class GameDisplay implements Display {
 
     /**
-     * The user's choice.
-     */
-    private int choice = 0;
-
-    /**
      * Displays a menu.
      * @param question The title of the menu.
      * @param choices The items of the menu.
