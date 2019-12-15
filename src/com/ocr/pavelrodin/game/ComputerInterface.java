@@ -11,6 +11,11 @@ public interface ComputerInterface {
     public void inputCombination();
 
     /**
+     * Saves the hints given by the player.
+     */
+    public void inputHints();
+
+    /**
      * Runs a new game in the mode defender.
      * @return true if the player wins.
      */

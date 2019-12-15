@@ -8,6 +8,16 @@ import com.ocr.pavelrodin.display.Display;
 public class Computer extends Player implements ComputerInterface{
 
     /**
+     * Hints.
+     */
+    private char[] hints = new char[numberOfDigits];
+
+    /**
+     * Valid hints.
+     */
+    private char[] template = {'-', '+', '='};
+
+    /**
      * Constructor. Creates a new entity Computer.
      * @param numberOfDigits the number of digits in the given combination.
      * @param numberOfAttempts the number of attempts.
@@ -33,14 +43,14 @@ public class Computer extends Player implements ComputerInterface{
      * @return true if the player wins.
      */
     public boolean defender () {
-        for (int i = 0; i < numberOfDigits; i++) {
-            suggestions[i] = generateDigit(0, 9);
-        }
+
         for (int i = 0; i < numberOfAttempts; i++) {
             System.out.println("Tentetive numéro : " + (i + 1));
             if (!this.turn()){
                 System.out.println("Vous avez perdu.");
                 return false;
+            } else if (i < numberOfAttempts - 1) {
+                inputHints();
             }
         }
         System.out.println("Felicitations ! Vous avez gagné !");
@@ -53,27 +63,42 @@ public class Computer extends Player implements ComputerInterface{
     public void inputCombination() {
         System.out.println("Saisissez " + numberOfDigits + " chifres.");
         number = display.inputNumber(0, 9, numberOfDigits);
+        for (int i = 0; i < numberOfDigits; i++) {
+            suggestions[i] = -1;
+            hints[i] = '+';
+        }
     }
+
+    /**
+     * Saves the hints given by the player.
+     */
+    public void inputHints() {
+        System.out.println("L'ordinateur n'a pas réussi à diviner la combination. Saisissez des indices.");
+        hints = display.inputHints(numberOfDigits, template);
+    }
+
 
     /**
      * Makes an attempt to guess the combination.
      * @return true if the attempt is successful.
      */
     public boolean turn() {
-        display.displayNumber("Combinaision à essayer : ", suggestions);
         boolean isWin = false;
         for (int i = 0; i < numberOfDigits; i++) {
-            if (suggestions[i] < number[i]) {
-                isWin = true;
+            if (hints[i] == '+') {
                 suggestions[i] = generateDigit(suggestions[i] + 1, 9);
-            } else if (suggestions[i] > number[i]) {
-                isWin = true;
+            } else if (hints[i] == '-') {
                 suggestions[i] = generateDigit(0, suggestions[i] - 1);
             }
         }
 
-        return isWin;
+        display.displayNumber("Combinaison à essayer : ", suggestions);
+        for (int i = 0; i < numberOfDigits; i++) {
+            if (suggestions[i] != number[i])
+                isWin = true;
+        }
 
+        return isWin;
     }
 
 }

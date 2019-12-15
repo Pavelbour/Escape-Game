@@ -49,7 +49,6 @@ public class Game {
         String[] menuItems = {"Challenger", "Défenseur", "Duel"};
         modeOfGame = display.displayMenu("Choisissez le mode de jeu", menuItems);
         this.launchGame();
-        this.endGame();
     }
 
     /**
@@ -82,6 +81,7 @@ public class Game {
                     }
                     break;
         }
+        this.endGame();
     }
 
     /**
@@ -119,6 +119,7 @@ public class Game {
                     System.out.println("Vous avez perdu.");
                     return false;
                 } else {
+                    computer.inputHints();
                     isUserTurn = true;
                 }
             }

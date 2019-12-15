@@ -66,4 +66,43 @@ public class GameDisplay implements Display {
         }
         return responses;
     }
+
+    /**
+     * Fetches the user's hints and verifies it.
+     * @param number The number of hints.
+     * @param template The valid hints.
+     * @return The user's hints.
+     */
+    public char[] inputHints (int number, char[] template) {
+        Scanner sc = new Scanner(System.in);
+        char[] responses = new char[number];
+        boolean isHintsValid = true;
+        for (int i = 0; i < number; i++){
+            do {
+                if (!isHintsValid) {
+                    System.out.println("Votre entrée est incorrect. Réessayez encore une fois.");
+                }
+                try {
+                    responses[i] = sc.next().charAt(0);
+                    if (!verifyHints(template, responses[i])) {
+                        isHintsValid = false;
+                    } else {
+                        isHintsValid = true;
+                    }
+                } catch (InputMismatchException e) {
+                    isHintsValid = false;
+                    sc.next();
+                }
+            } while (!isHintsValid);
+        }
+        return responses;
+    }
+
+    private boolean verifyHints(char[] template, char hint) {
+        for (char h : template) {
+            if (hint == h)
+                return true;
+        }
+        return false;
+    }
 }

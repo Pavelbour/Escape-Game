@@ -61,10 +61,10 @@ public class Human extends Player implements HumanInterface {
         suggestions = display.inputNumber(0, 9, numberOfDigits);
         for (int i = 0; i < numberOfDigits; i++) {
             if (suggestions[i] < number[i]){
-                System.out.print("-");
+                System.out.print("+");
                 isWin = false;
             } else if (suggestions[i] > number[i]) {
-                System.out.print("+");
+                System.out.print("-");
                 isWin = false;
             } else {
                 System.out.print("=");
